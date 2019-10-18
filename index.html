@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<label for="iterations">Number of iterations</label>
+<input type="number" id="iterations" />
+<button onclick="simulate()">Simulate</button>
+<br>
+<canvas width="500" height="500"></canvas>
+
+<script>
+let canvas = document.getElementsByTagName("canvas")[0];
+let ctx = canvas.getContext("2d");
+
+const triangleCoords = [
+    {x: 250, y: 77},
+    {x: 50, y: 423},
+    {x: 450, y: 423}
+];
+
+function drawTriangle(ctx) {
+    let from = triangleCoords[2];
+
+    for (let to of triangleCoords) {
+        ctx.beginPath();
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        from = to;
+    }
+}
+
+function getRandomTriangleTop() {
+    let index = Math.floor(Math.random() * 3)
+
+    return triangleCoords[index]
+}
+
+function getNextPointCoords(currentCoords) {
+    let targetTop = getRandomTriangleTop();
+
+    let distanceX = Math.abs(currentCoords.x - targetTop.x)
+    let distanceY = Math.abs(currentCoords.y - targetTop.y)
+
+    let newX = Math.floor(Math.min(currentCoords.x, targetTop.x) + distanceX / 2)
+    let newY = Math.floor(Math.min(currentCoords.y, targetTop.y) + distanceY / 2)
+
+    // console.debug({
+    //     from: currentCoords,
+    //     to: targetTop,
+    //     distance: {
+    //         x: distanceX,
+    //         y: distanceY
+    //     },
+    //     new: {
+    //         x: newX,
+    //         y: newY
+    //     }
+    // })
+
+    return {x: newX, y: newY}
+}
+
+function simulate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let iterations = document.getElementById("iterations").value;
+    if (iterations < 1) {
+        console.error("Invalid argument iterations: ", iterations, "Must be int greater than 0")
+        return
+    }
+
+    drawTriangle(ctx);
+    ctx.fillStyle = "blue";
+
+    let currentCoords = getRandomTriangleTop()
+    for (let i = 0; i < iterations; i++) {
+        let coords = getNextPointCoords(currentCoords)
+        ctx.fillRect(coords.x, coords.y, 1, 1);
+        currentCoords = coords;
+    }
+}
+</script>
+</body>
+</html>
