@@ -50,19 +50,6 @@ function getNextPointCoords(currentCoords) {
     let newX = Math.floor(Math.min(currentCoords.x, targetTop.x) + distanceX / 2)
     let newY = Math.floor(Math.min(currentCoords.y, targetTop.y) + distanceY / 2)
 
-    // console.debug({
-    //     from: currentCoords,
-    //     to: targetTop,
-    //     distance: {
-    //         x: distanceX,
-    //         y: distanceY
-    //     },
-    //     new: {
-    //         x: newX,
-    //         y: newY
-    //     }
-    // })
-
     return {x: newX, y: newY}
 }
 
